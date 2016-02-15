@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="../bower_components/polymer/polymer.html" rel="import">
+    <link href="../bower_components/iron-flex-layout/iron-flex-layout.html" rel="import">
+    <link href="../bower_components/paper-material/paper-material.html" rel="import">
+    <link href="../bower_components/paper-input/paper-input.html" rel="import">
+    <link href="../bower_components/paper-button/paper-button.html" rel="import">
+    <link href="../bower_components/paper-styles/color.html" rel="import">
+    <link href="../bower_components/paper-dialog/paper-dialog.html" rel="import">
+    <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+    <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+
+</head>
+
+<dom-module id="palin-app">
+    <style>
+        paper-material {
+            padding: 10px;
+        }
+
+        paper-button {
+            background: var(--paper-indigo-500);
+            color: white;
+        }
+
+        paper-dialog {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+    <template>
+        <paper-material elevation="1">
+            <paper-input id="text" label="Type text here" value="{{text}}"></paper-input>
+            <paper-button raized on-click="checkPalindrome">Check Palindrome</paper-button>
+        </paper-material>
+        <paper-dialog id="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal>
+            {{dialogText}}
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>Close</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: "palin-app",
+        text: {
+            type: String
+        },
+        checkPalindrome: function () {
+            var text = this.text.replace(/[^a-zA-Z]+/g, ''),
+                reverseText = text.split('').reverse().join(''),
+                areEqual = function (str1, str2) {
+                    return str1.toUpperCase() === str2.toUpperCase();
+                };
+
+            if (text.length === 0) {
+                this.dialogText = 'you did not typed any word!';
+            } else if (areEqual(text, reverseText)) {
+                this.dialogText = 'the word is palindrome.';
+            } else {
+                this.dialogText = 'the word is not palindrome!';
+            }
+            this.$.dialog.open();
+        }
+    });
+</script>
+
+</html>
